@@ -34,12 +34,18 @@ while True:
 
     if opcao == "1":
         print("Produtos da loja:")
-        loja.listarProdutos()
+        try:
+            loja.listarProdutos()
+        except:
+            pass
         print()
 
     elif opcao == "2":
         print("Clientes da loja:")
-        loja.listarClientes()
+        try:
+            loja.listarClientes()
+        except:
+            pass
         print()
 
     elif opcao == "3":
@@ -58,7 +64,10 @@ while True:
 
     elif opcao == "4":
         codigo_produto = input("Digite o código do produto que deseja remover: ")
-        loja.removerProduto(int(codigo_produto))
+        try:
+            loja.removerProduto(int(codigo_produto))
+        except:
+            pass
         print("Produto removido com sucesso!")
         print()
 
@@ -104,7 +113,6 @@ while True:
                 break
 
             pedido.adicionarItem(produto_encontrado, int(quantidade))
-
         
         loja.registrarPedido(pedido)
         loja.comprar(cliente, pedido)  # Corrigido para passar cliente e pedido separadamente
