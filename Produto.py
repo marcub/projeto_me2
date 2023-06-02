@@ -5,7 +5,6 @@ class Produto:
         self.__descricao = descricao
         self.__preco = preco
         self.__categoria = categoria
-        self.__quantidadeCarrinho = 0
         self.__estoque = estoque
 
     @property
@@ -49,14 +48,6 @@ class Produto:
         self.__categoria = nova_categoria
 
     @property
-    def quantidadeCarrinho(self):
-        return self.__quantidadeCarrinho
-
-    @quantidadeCarrinho.setter
-    def quantidadeCarrinho(self, nova_quantidade):
-        self.__quantidadeCarrinho = nova_quantidade
-
-    @property
     def estoque(self):
         return self.__estoque
 
@@ -72,8 +63,8 @@ class Produto:
     def quantidade(self, nova_quantidade):
         self.__estoque = nova_quantidade
 
-    def subTotal(self):
-        return self.preco * self.quantidadeCarrinho
+    def subTotal(self, quantidadeCarrinho):
+        return self.preco * quantidadeCarrinho
 
     def atualizarCarrinho(self, quantidade):
         self.quantidadeCarrinho = quantidade

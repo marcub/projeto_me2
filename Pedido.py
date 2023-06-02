@@ -1,11 +1,12 @@
 from Produto import Produto
 from datetime import date
+from PedidoException import PedidoException
 
 class Pedido:
-    def __init__(self, cod, cliente, produtos):
+    def __init__(self, cod, cliente):
         self.__cod = cod
         self.__cliente = cliente
-        self.__produtos = produtos
+        self.__produtos = {}
 
     @property
     def cod(self):
@@ -32,32 +33,20 @@ class Pedido:
         self.__produtos = novos_produtos
 
     def calcularTotal(self):
-        total = 0.0
-        for produto in self.produtos:
-            total += produto.preco
+        total = 0
+        for item in self.produtos:
+            total += item.subTotal(self.produtos[item])
         return total
 
     def adicionarItem(self, produto, quantidade):
-        item = {'produto': produto, 'quantidade': quantidade}
-        self.produtos.append(item)
+        self.produtos[produto] = quantidade
 
     def removerCarrinho(self, produto):
-        if produto in self.produtos:
-            self.produtos.remove(produto)
-            produto.quantidadeCarrinho -= 1
-            if produto.quantidadeCarrinho < 0:
-                produto.quantidadeCarrinho = 0
+        try:
+            self.produtos.pop(produto)
+        except KeyError:
+            print("Erro ao remover: Produto não está no carrinho.")
 
-    def calcularTotal(self):
-        total = 0
-
-        for item in self.produtos:
-            produto = item['produto']
-            quantidade = item['quantidade']
-            subtotal = quantidade * produto.preco
-            total += subtotal
-
-        return total
 
     def gerarNotaFiscal(self):
         data_atual = date.today().strftime("%d/%m/%Y")
@@ -68,9 +57,9 @@ class Pedido:
         nota_fiscal += "Produtos:\n"
 
         for item in self.produtos:
-            produto = item['produto']
-            quantidade = item['quantidade']
-            subtotal = quantidade * produto.preco
+            produto = item
+            quantidade = self.produtos[item]
+            subtotal = item.subTotal(quantidade)
             nota_fiscal += f" - {produto.nome} ({quantidade}x) - R${subtotal:.2f}\n"
 
         nota_fiscal += f"Valor Total: R${self.calcularTotal():.2f}"
