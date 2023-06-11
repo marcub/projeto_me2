@@ -90,22 +90,7 @@ class Loja:
             print(produto)
             print("\n")
 
-    def gerarNotaFiscal(self, pedido):
-        if pedido in self.pedidos:
-            data_atual = date.today().strftime("%d/%m/%Y")
-            nota_fiscal = f"Pedido {pedido.cod}\n"
-            nota_fiscal += f"Data: {data_atual}\n"
-            nota_fiscal += f"Cliente: {pedido.cliente.nome}\n"
-            nota_fiscal += f"CPF: {pedido.cliente.cpf}\n"
-            nota_fiscal += "Produtos:\n"
-
-            for item in pedido.produtos:
-                produto = item
-                quantidade = pedido.produtos[item]
-                subtotal = item.subTotal(quantidade)
-                nota_fiscal += f" - {produto.nome} ({quantidade}x) - R$ {subtotal:.2f}\n"
-
-            nota_fiscal += f"Valor Total: R$ {pedido.calcularTotal():.2f}"
-            return nota_fiscal
-        else:
-            return "Pedido não encontrado!"
+    def listarPedidos(self):
+        for pedido in self.pedidos:
+            print(pedido.gerarNotaFiscal())
+            print("\n")
