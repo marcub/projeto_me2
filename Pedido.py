@@ -51,7 +51,7 @@ class Pedido:
     def adicionarItem(self, produto, quantidade):
         self.produtos[produto] = quantidade
 
-    def removerCarrinho(self, produto):
+    def removerItem(self, produto):
         try:
             self.produtos.pop(produto)
         except KeyError:
