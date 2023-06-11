@@ -1,10 +1,10 @@
-from datetime import date
 from LojaException import LojaException
 
 class Loja:
-    def __init__(self, nome, cnpj, produtos, clientes, pedidos):
+    def __init__(self, nome, cnpj, senha, produtos, clientes, pedidos):
         self.__nome = nome
         self.__cnpj = cnpj
+        self.__senha = senha
         self.__produtos = produtos
         self.__clientes = clientes
         self.__pedidos = pedidos
@@ -24,6 +24,14 @@ class Loja:
     @cnpj.setter
     def cnpj(self, novo_cnpj):
         self.__cnpj = novo_cnpj
+
+    @property
+    def senha(self):
+        return self.__senha
+
+    @senha.setter
+    def senha(self, novo_senha):
+        self.__senha = novo_senha
 
     @property
     def produtos(self):
