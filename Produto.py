@@ -1,6 +1,7 @@
 class Produto:
-    def __init__(self, cod, nome, descricao, preco, categoria, estoque):
+    def __init__(self, cod, sku, nome, descricao, preco, categoria, estoque):
         self.__cod = cod
+        self.__sku = sku
         self.__nome = nome
         self.__descricao = descricao
         self.__preco = preco
@@ -14,6 +15,14 @@ class Produto:
     @cod.setter
     def cod(self, novo_cod):
         self.__cod = novo_cod
+
+    @property
+    def sku(self):
+        return self.__sku
+
+    @sku.setter
+    def sku(self, novo_sku):
+        self.__sku = novo_sku
 
     @property
     def nome(self):
@@ -55,16 +64,11 @@ class Produto:
     def estoque(self, novo_estoque):
         self.__estoque = novo_estoque
 
-    @property
-    def quantidade(self):
-        return self.__estoque
-
-    @quantidade.setter
-    def quantidade(self, nova_quantidade):
-        self.__estoque = nova_quantidade
+    def __str__(self):
+        return (f"Código: {self.cod}\nSKU: {self.sku}\nNome: {self.nome}\nDescrição: {self.descricao}\nPreço: R$ {self.preco:.2f}\nCategoria: {self.categoria}\nEstoque: {self.estoque}")
 
     def subTotal(self, quantidadeCarrinho):
         return self.preco * quantidadeCarrinho
 
-    def atualizarCarrinho(self, quantidade):
-        self.quantidadeCarrinho = quantidade
+    def atualizarEstoque(self, quantidade):
+        self.estoque -= quantidade

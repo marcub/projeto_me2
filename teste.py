@@ -20,3 +20,5 @@ if __name__ == "__main__":
     pedido1.removerCarrinho(produto2)
 
     print(pedido1.gerarNotaFiscal())
+
+    #print(marcus)

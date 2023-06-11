@@ -1,7 +1,3 @@
-from Produto import Produto
-from datetime import date
-from PedidoException import PedidoException
-
 class Pedido:
     def __init__(self, cod, cliente):
         self.__cod = cod
@@ -46,22 +42,3 @@ class Pedido:
             self.produtos.pop(produto)
         except KeyError:
             print("Erro ao remover: Produto não está no carrinho.")
-
-
-    def gerarNotaFiscal(self):
-        data_atual = date.today().strftime("%d/%m/%Y")
-        nota_fiscal = f"Pedido {self.cod}\n"
-        nota_fiscal += f"Data: {data_atual}\n"
-        nota_fiscal += f"Cliente: {self.cliente.nome}\n"
-        nota_fiscal += f"CPF: {self.cliente.cpf}\n"
-        nota_fiscal += "Produtos:\n"
-
-        for item in self.produtos:
-            produto = item
-            quantidade = self.produtos[item]
-            subtotal = item.subTotal(quantidade)
-            nota_fiscal += f" - {produto.nome} ({quantidade}x) - R${subtotal:.2f}\n"
-
-        nota_fiscal += f"Valor Total: R${self.calcularTotal():.2f}"
-
-        return nota_fiscal

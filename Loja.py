@@ -1,3 +1,6 @@
+from datetime import date
+from LojaException import LojaException
+
 class Loja:
     def __init__(self, nome, cnpj, produtos, clientes, pedidos):
         self.__nome = nome
@@ -46,45 +49,63 @@ class Loja:
     def pedidos(self, novos_pedidos):
         self.__pedidos = novos_pedidos
 
-    def registrarProduto(self, produto):
-        self.produtos.append(produto)
-
-    def removerProduto(self, cod):
+    def registrarProduto(self, novoProduto):
         for produto in self.produtos:
-            if produto.cod == cod:
+            if produto.sku == novoProduto.sku:
+                raise LojaException("Erro ao registrar produto: SKU já cadastrado")
+        self.produtos.append(novoProduto)
+
+    def removerProduto(self, sku):
+        for produto in self.produtos:
+            if produto.sku == sku:
                 self.produtos.remove(produto)
                 break
+            else:
+                raise LojaException("Falha ao remover produto: SKU não encontrado")
 
-    def registrarCliente(self, cliente):
-        self.clientes.append(cliente)
-
-    def removerCliente(self, cod):
+    def registrarCliente(self, novoCliente):
         for cliente in self.clientes:
-            if cliente.id == cod:
+            if cliente.cpf == novoCliente.cpf:
+                raise LojaException("Erro ao registrar cliente: CPF já cadastrado")
+        self.clientes.append(novoCliente)
+
+    def removerCliente(self, codigo):
+        for cliente in self.clientes:
+            if cliente.cod == codigo:
                 self.clientes.remove(cliente)
                 break
+            else:
+                raise LojaException("Falha ao remover cliente: código não encontrado")
 
     def registrarPedido(self, pedido):
         self.pedidos.append(pedido)
 
     def listarClientes(self):
         for cliente in self.clientes:
-            print(cliente.nome)
+            print(cliente)
+            print("\n")
 
     def listarProdutos(self):
         for produto in self.produtos:
-            print(produto.nome)
+            print(produto)
+            print("\n")
 
-    def comprar(self, cliente, pedido):
-        for item in pedido.produtos:
-            produto = item['produto']
-            quantidade = item['quantidade']
-            if produto in self.produtos:
-                if produto.quantidade >= quantidade:
-                    produto.quantidade -= quantidade
-                    produto.quantidadeCarrinho += quantidade
-                    cliente.adicionarCarrinho(produto, quantidade)
-                else:
-                    print(f"Não há estoque suficiente para o produto {produto.nome}")
-            else:
-                print(f"O produto {produto.nome} não está disponível na loja.")
+    def gerarNotaFiscal(self, pedido):
+        if pedido in self.pedidos:
+            data_atual = date.today().strftime("%d/%m/%Y")
+            nota_fiscal = f"Pedido {pedido.cod}\n"
+            nota_fiscal += f"Data: {data_atual}\n"
+            nota_fiscal += f"Cliente: {pedido.cliente.nome}\n"
+            nota_fiscal += f"CPF: {pedido.cliente.cpf}\n"
+            nota_fiscal += "Produtos:\n"
+
+            for item in pedido.produtos:
+                produto = item
+                quantidade = pedido.produtos[item]
+                subtotal = item.subTotal(quantidade)
+                nota_fiscal += f" - {produto.nome} ({quantidade}x) - R$ {subtotal:.2f}\n"
+
+            nota_fiscal += f"Valor Total: R$ {pedido.calcularTotal():.2f}"
+            return nota_fiscal
+        else:
+            return "Pedido não encontrado!"

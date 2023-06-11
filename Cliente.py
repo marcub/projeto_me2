@@ -7,7 +7,7 @@ class Cliente:
         self.__endereco = endereco
         self.__email = email
         self.__senha = senha
-        self.__carrinho = []
+        self.__pedidos = []
 
     @property
     def cod(self):
@@ -66,9 +66,25 @@ class Cliente:
         self.__senha = nova_senha
 
     @property
-    def carrinho(self):
-        return self.__carrinho
+    def pedidos(self):
+        return self.__pedidos
+    
+    def __str__(self):
+        return (f"Código: {self.cod}\nNome: {self.nome}\nCPF: {self.cpf}\nData de Nascimento: {self.dataDeNascimento}\nEndereço: {self.endereco}\nEmail: {self.email}")
 
-    def adicionarCarrinho(self, produto, quantidade):
-        self.__carrinho.append((produto, quantidade))
+    def adicionarPedido(self, pedido):
+        self.__pedidos.append(pedido)
+
+    def comprar(self, pedido, loja):
+        for item in pedido.produtos:
+            produto = item
+            quantidade = pedido.produtos[item]
+            if produto in loja.produtos:
+                if produto.estoque >= quantidade:
+                    produto.atualizarEstoque(quantidade)
+                else:
+                    print(f"Não há estoque suficiente para o produto {produto.nome}")
+            else:
+                print(f"O produto não está disponível na loja.")
+        loja.registrarPedido(pedido)
 
